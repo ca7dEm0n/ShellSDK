@@ -1,0 +1,59 @@
+###
+ # @Author: cA7dEm0n
+ # @Blog: http://www.a-cat.cn
+ # @Since: 2020-01-04 23:47:25
+ # @Motto: 欲目千里，更上一层
+ ###
+
+LOG_PATH=
+
+LOG_LEVEL=2
+
+declare -r LOG_LEVEL_DICT=(
+    [0]="ERROR"
+    [1]="INFO"
+    [2]="DEBUG"
+)
+
+wLog() {
+    ###
+     # @description: 写入日志
+     # @param {int} level 日志等级
+     # @param {str} message 日志信息
+    ###
+    : 支持0-2
+    local level=$1
+    local message=$2
+    [ -z ${LOG_PATH} ]  && echo "LOG_PATH not set!" && exit 1
+    if [ ${level} -le ${LOG_LEVEL} ]; then
+        nowTime=$(date "+%Y-%m-%d %H:%M:%s")
+        printf "[%s] [%s] %s\n"  "${nowTime}" "${LOG_LEVEL_DICT[$level]}" "${message}" >> ${LOG_PATH}
+    fi
+}
+
+commandCache() {
+    ###
+     # @description: 缓存命令执行结果
+     # @param {str} COMMAND 命令
+     # @return: result
+    ###
+    local COMMAND=$1
+    FILENAME=$(echo ${COMMAND///}|awk -F " " '{print $1$2}')
+    CACHEFILE="/tmp/${FILENAME}"
+    if [ -e ${CACHEFILE} ]
+    then
+        TIMEFLM=$(stat -c %Y ${CACHEFILE})
+        TIMENOW=$(date +%s)
+        if [ $(expr ${TIMENOW} - ${TIMEFLM}) -le 5 ];
+        then
+            TEXT=$(cat ${CACHEFILE})
+        else
+            TEXT=$(echo ${COMMAND}|sh)
+            echo ${TEXT} > ${CACHEFILE}
+        fi
+    else
+        TEXT=$(echo ${COMMAND}|sh)
+        echo ${TEXT} > ${CACHEFILE}
+    fi
+    echo ${TEXT}
+}

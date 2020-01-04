@@ -1,0 +1,23 @@
+###
+ # @Author: cA7dEm0n
+ # @Blog: http://www.a-cat.cn
+ # @Since: 2020-01-04 23:38:59
+ # @Motto: 欲目千里，更上一层
+ ###
+ 
+declare -r  SGR_RESET="\033[0m"
+declare -r  SGR_FAINT="\033[2m"
+declare -r  SGR_RED="\033[31m"
+declare -r  SGR_CYAN="\033[36m"
+declare -r  SGR_GREEN="\033[42m"
+
+
+echoRed () {
+    : print red color
+    printf "${SGR_RED}%s${SGR_RESET}\n" "$*"
+}
+
+echoGreen() {
+    : print green color
+    printf "${SGR_GREEN}%s${SGR_RESET}\n" "$*"
+}
