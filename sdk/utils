@@ -6,7 +6,7 @@
  ###
 
 LOG_PATH=
-
+LOG_CONSOLE=
 LOG_LEVEL=2
 
 declare -r LOG_LEVEL_DICT=(
@@ -28,6 +28,7 @@ wLog() {
     if [ ${level} -le ${LOG_LEVEL} ]; then
         nowTime=$(date "+%Y-%m-%d %H:%M:%s")
         printf "[%s] [%s] %s\n"  "${nowTime}" "${LOG_LEVEL_DICT[$level]}" "${message}" >> ${LOG_PATH}
+        [ ${LOG_CONSOLE:-0} -eq 1 ] && printf "[%s] [%s] %s\n"  "${nowTime}" "${LOG_LEVEL_DICT[$level]}" "${message}"
     fi
 }
 
